@@ -1,0 +1,25 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
+p, div, div#root {
+    all: unset;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #D3D3D3;
+}
+
+.tb-container {
+    padding-top: 1000px;
+    width: 100%;
+    background-color: blueviolet;
+}
+
+form {
+    padding: 12px 9px 12px 24px;
+}
