@@ -2,21 +2,27 @@ require('dotenv').config();
 require('express-async-errors');
 
 const express = require('express');
+const cookieParser = require('cookie-parser');
 const app = express();
 const connectDB = require('./db/connect');
 const authenticateUser = require('./middleware/authentication');
 
 const authRouter = require('./routes/auth');
-//const blogRouter = require('./routes/blogs');
+const messageRouter = require('./routes/message');
 
 const notFoundMiddleware = require('./middleware/not-found');
 const errorHandlerMiddleware = require('./middleware/error-handler');
 
 app.use(express.json());
+app.use(cookieParser());
+// app.use(cors({
+//     origin: ['http://localhost:5173'],
+//     credentials: true
+// }))
 
 //routes
 app.use('/auth', authRouter);
-//app.use('/blog', authenticateUser ,blogRouter);
+app.use('/message', authenticateUser, messageRouter);
 
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);
