@@ -14,7 +14,64 @@ body {
     background-color: #D3D3D3;
 }
 
-.cp-container {
+.chatbox-container {
+    position: absolute;
+    height: auto;
     width: 1920px;
-    height: 1080px;
+    padding: 84px 0px 80px 0px;
+    display: flex;
+    flex-direction: column;
+}
+
+.other-message {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0 960px 0 24px;
+    gap: 8px;
+}
+
+.other-message img {
+    width: 42px;
+    height: 42px;
+    border: none;
+    border-radius: 50%;
+}
+
+.other-text {
+    padding: 8px 16px;
+    height: 100%;
+    width: auto;
+    background-color: #FFFFFF;
+    border-radius: 32px;
+}
+
+.other-text p {
+    font-family: 'Inter';
+    font-size: 16px;
+    font-weight: 200;
+}
+
+.my-message {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 0 20px 0 960px;
+}
+
+.my-text {
+    padding: 8px 16px;
+    height: 100%;
+    width: auto;
+    background-color: #303030;
+    border-radius: 32px;
+}
+
+.my-text p {
+    font-family: 'Inter';
+    font-size: 16px;
+    font-weight: 200;
+    color: #FFFFFF;
 }
