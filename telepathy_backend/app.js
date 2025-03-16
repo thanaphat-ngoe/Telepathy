@@ -2,8 +2,9 @@ require('dotenv').config();
 require('express-async-errors');
 
 const express = require('express');
+const cors = require('cors');
 const cookieParser = require('cookie-parser');
-const app = express();
+const {app, server} = require('./utils/socket');
 const connectDB = require('./db/connect');
 const authenticateUser = require('./middleware/authentication');
 
@@ -15,10 +16,10 @@ const errorHandlerMiddleware = require('./middleware/error-handler');
 
 app.use(express.json());
 app.use(cookieParser());
-// app.use(cors({
-//     origin: ['http://localhost:5173'],
-//     credentials: true
-// }))
+app.use(cors({
+    origin: ['http://localhost:5173'],
+    credentials: true
+}))
 
 //routes
 app.use('/auth', authRouter);
@@ -32,7 +33,7 @@ const port = process.env.PORT;
 const start = async () => {
     try{
         await connectDB(process.env.MONGO_URI);
-        app.listen(port, () => {
+        server.listen(port, () => {
             console.log(`Server is listening on port ${port}`);
         })
     }

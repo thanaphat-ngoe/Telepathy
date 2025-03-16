@@ -2,6 +2,8 @@ const { StatusCodes } = require('http-status-codes');
 const Message = require("../models/Message");
 const User = require("../models/User");
 const { NotFoundError } = require('../errors')
+const { getReceiverSocketId, io } = require('../utils/socket');
+
 
 const getAllMessage = async (req, res) => {
     const { id : userToChat } = req.params;
@@ -44,7 +46,11 @@ const sendMessage = async(req, res) => {
 
     await newMessage.save();
 
-    //upcoming task : socket.io realtime functionality
+    const receiverSocketId = getReceiverSocketId(receiverId);
+    console.log(receiverSocketId);
+    if(receiverSocketId){
+        io.to(receiverSocketId).emit("newMessage", newMessage);
+    }
 
     res.status(StatusCodes.CREATED).json(newMessage);
 }
