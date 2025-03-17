@@ -18,7 +18,7 @@ const errorHandlingMiddleware = (err, req, res, next) => {
         customError.msg = `Invalid ID format: ${err.value}`;
         customError.statusCode = 400;
     }
-
+    console.log(customError.msg);
     return res.status(customError.statusCode).json({msg : customError.msg});
 }
 

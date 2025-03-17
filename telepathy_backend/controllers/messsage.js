@@ -1,7 +1,8 @@
 const { StatusCodes } = require('http-status-codes');
 const Message = require("../models/Message");
 const User = require("../models/User");
-const { NotFoundError } = require('../errors')
+const Chat = require('../models/Chat');
+const { NotFoundError, UnauthenticatedError, ForbiddenError } = require('../errors')
 const { getReceiverSocketId, io } = require('../utils/socket');
 
 
@@ -13,9 +14,6 @@ const getAllMessage = async (req, res) => {
         throw new NotFoundError(`User with id ${userToChat} does not exist`);
     }
     const myId = req.user.userId;
-    if (!myId) {
-        return res.status(401).json({ error: "User is not authenticated" });
-    }
 
     const messages = await Message.find({
         $or: [
@@ -38,7 +36,19 @@ const sendMessage = async(req, res) => {
         throw new NotFoundError(`User with id ${receiverId} does not exist`);
     }
 
+    let chat = await Chat.findOne({
+        participants: { $all: [senderId, receiverId]}
+    });
+
+    if(!chat){
+        chat = new Chat({
+            participants: [senderId, receiverId]
+        })
+        await chat.save();
+    }
+
     const newMessage = new Message({
+        chatId: chat._id,
         senderId,
         receiverId,
         text
@@ -55,7 +65,28 @@ const sendMessage = async(req, res) => {
     res.status(StatusCodes.CREATED).json(newMessage);
 }
 
+const deleteChat = async(req, res) => {
+    const { id : chatId } = req.params;
+    const userId = req.user.userId;
+    const chat = await Chat.findById(chatId);
+
+    if(!chat){
+        throw new NotFoundError(`Chat with id ${chatId} does not exist`);
+    }
+
+    if(!chat.participants.includes(userId)){
+        throw new ForbiddenError('You have no permission to delete this chat');
+    }
+
+    await Message.deleteMany({ chatId });
+    await chat.deleteOne();
+
+    res.status(StatusCodes.OK).json({messages : `message with chat id ${chatId} deleted successfully`});
+    
+}
+
 module.exports = {
     getAllMessage,
-    sendMessage
+    sendMessage,
+    deleteChat
 }
