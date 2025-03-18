@@ -1,6 +1,6 @@
-import { MessageSquare } from "lucide-react";
-import { useAuthStore } from "../store/useAuthStore"
 import { Link } from "react-router-dom";
+import { useAuthStore } from "../store/useAuthStore";
+import { LogOut, MessageSquare, Settings, User } from "lucide-react";
 
 const Navbar = () => {
 
