@@ -1,4 +1,4 @@
-import 'express-async-errors';  
+import 'express-async-errors';
 import { json, urlencoded } from "express";
 import session from "express-session";
 import passport from "passport";

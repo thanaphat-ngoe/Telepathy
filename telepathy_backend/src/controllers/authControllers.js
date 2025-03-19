@@ -4,9 +4,9 @@ import User from '../models/userModels.js';
 
 export const authRegister = async (req, res) => {
     try {
-        const { email, password } = req.body;
+        const { firstname, lastname, email, password } = req.body;
 
-        if (!email || !password) {
+        if (!firstname || !lastname || !email || !password) {
             return res.status(400).json({ message: "All field are required." });
         }
 
@@ -16,7 +16,7 @@ export const authRegister = async (req, res) => {
         }
 
         const hashedPassword = await bcrypt.hash(password, 12);
-        const newUser = new User({ email, password: hashedPassword });
+        const newUser = new User({ firstname, lastname, email, password: hashedPassword });
         const result = await newUser.save();
 
         res.status(201).json({ message: "Registration successful!", email: result.email });
