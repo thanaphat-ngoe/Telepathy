@@ -28,11 +28,11 @@ const userSchema = new mongoose.Schema({
     twoFactorSecret: {
         type: String
     },
-    expiresAt: {  
-        type: Date,
-        default: new Date(Date.now() + 60 * 60 * 1000),  // 60 minutes from creation
-        index: { expires: 0 } // TTL Index: Document will auto-delete
-    }
+    // expiresAt: {  
+    //     type: Date,
+    //     default: new Date(Date.now() + 60 * 60 * 1000),  // 60 minutes from creation
+    //     index: { expires: 0 } // TTL Index: Document will auto-delete
+    // }
 }, { timestamps: true });
 
 const User = mongoose.model("User", userSchema);

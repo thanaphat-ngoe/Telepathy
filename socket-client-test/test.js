@@ -2,16 +2,16 @@ const axios = require('axios');
 const { io } = require('socket.io-client');
 
 // Sender Info
-const senderId = "67d541746d69f6fc9d713077";  // Sender's ID
-const receiverId = "67d3f05ff34d48596d4a0e13";  // Receiver's ID
+const senderId = "67d9663eb157c76f7c6793d8";  // Sender's ID
+const receiverId = "67d9667eb157c76f7c6793db";  // Receiver's ID
 
-const serverUrl = "http://localhost:5000";
+const serverUrl = "http://localhost:3000";
 
-// JWT Tokens
-const senderJwtToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2N2Q1NDE3NDZkNjlmNmZjOWQ3MTMwNzciLCJuYW1lIjoiUGFydW5jaGFpMiIsImlhdCI6MTc0MjExNDgyNCwiZXhwIjoxNzQ0NzA2ODI0fQ.n0_Ji0-9dRk2g9y0llVDpVpdLfEo1ZMQFRbKUdgnZMY";
-const receiverJwtToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2N2QzZjA1ZmYzNGQ0ODU5NmQ0YTBlMTMiLCJuYW1lIjoiVGhhbmFwaGF0IiwiaWF0IjoxNzQyMTE4MDA1LCJleHAiOjE3NDQ3MTAwMDV9.I1iRVHeZwmVtiZfCOmxGJFJs107OMDhYH-H1o4QEZOk";
+// Session ID (SID) for Set-Cookie header
+const sid1 = 's%3AfBBS5CVqH8Zskcf-PdykWBnwNcu21Fpb.%2FulnF3iKlsAQ6MGBxIrM9iTe1sdjW83gotw2c0iRIQg';
+const sid2 = 's%3AGwxORXKWrsDMiMwDoPY1A46EapBF2IBG.i5VaLpN4lJj3NlSBRE06i7yVv6Tq9L4LZCShfKPu%2BlA';
 
-// Sender connects to the server
+// Create a socket connection for the sender
 const socketSender = io(serverUrl, {
     query: { userId: senderId }
 });
@@ -30,9 +30,9 @@ socketSender.on("connect", () => {
         };
 
         try {
-            const response = await axios.post(`${serverUrl}/message/${receiverId}`, messageData, {
+            const response = await axios.post(`${serverUrl}/api/message/${receiverId}`, messageData, {
                 headers: {
-                    Cookie: `jwt=${senderJwtToken}`
+                    'set-cookie' : 'connect.sid=s%3AfBBS5CVqH8Zskcf-PdykWBnwNcu21Fpb.%2FulnF3iKlsAQ6MGBxIrM9iTe1sdjW83gotw2c0iRIQg'
                 }
             });
 
@@ -56,7 +56,7 @@ socketReceiver.on("connect", () => {
     });
 
     // Listen for incoming messages from Sender
-    socketReceiver.on("newMessage", async (message) => {
+    socketReceiver.on("newMessage", (message) => {
         console.log("Receiver received new message:", message);
 
         // Simulate reply after receiving the message
@@ -66,9 +66,9 @@ socketReceiver.on("connect", () => {
             };
 
             try {
-                const response = await axios.post(`${serverUrl}/message/${senderId}`, replyData, {
+                const response = await axios.post(`${serverUrl}/api/message/${senderId}`, replyData, {
                     headers: {
-                        Cookie: `jwt=${receiverJwtToken}`  // Use the receiver's JWT token
+                        'set-cookie' : 'connect.sid=s%3AGwxORXKWrsDMiMwDoPY1A46EapBF2IBG.i5VaLpN4lJj3NlSBRE06i7yVv6Tq9L4LZCShfKPu%2BlA'  // Set the cookie with SID
                     }
                 });
 
@@ -78,11 +78,6 @@ socketReceiver.on("connect", () => {
             }
         }, 3000); // Respond after 3 seconds
     });
-});
-
-// Listen for incoming messages on sender's side (optional, to confirm reply)
-socketSender.on("newMessage", (message) => {
-    console.log("Sender received new message:", message);
 });
 
 // Disconnect both after 20 seconds

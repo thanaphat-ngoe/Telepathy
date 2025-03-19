@@ -33,7 +33,7 @@ export const authLogin = (req, res, next) => {
 
         req.logIn(user, (error) => {
             if (error) return next(error);
-            console.log(req);
+            //console.log(req);
             return res.json({ message: "Login successful", email: user.email });
         });
     })(req, res, next);
