@@ -27,8 +27,8 @@ const LoginPage = () => {
                         transition-colors">
                             <MessageSquare className="w-6 h-6 text-primary" />
                         </div>
-                        <h1 className="text-2xl font-bold mt-2">Welcome Back</h1>
-                        <p className="text-base-content/60">Sign in to your account</p>
+                        <h1 className="text-2xl font-bold mt-2">Chat With Telepathy</h1>
+                        <p className="text-base-content/60">Login</p>
                     </div>
                 </div>
 
@@ -80,7 +80,7 @@ const LoginPage = () => {
                     </div>
 
                     <button type="submit" className="btn btn-primary w-full" disabled={isLoggingIn}>
-                        {isLoggingIn ? (<><Loader2 className="h-5 w-5 animate-spin" />Loading...</>) : ("Log In")}
+                        {isLoggingIn ? (<><Loader2 className="h-5 w-5 animate-spin" />Loading...</>) : ("Login")}
                     </button>
                 </form>
 

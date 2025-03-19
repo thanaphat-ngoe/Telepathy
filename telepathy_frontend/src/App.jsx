@@ -16,35 +16,35 @@ import { useThemeStore } from './store/useThemeStore';
 
 
 const App = () => {
-  const { authUser, checkAuth, isCheckingAuth, isLoggingOut } = useAuthStore();
-  const {theme} = useThemeStore()
+    const { authUser, checkAuth, isCheckingAuth, isLoggingOut } = useAuthStore();
+    const {theme} = useThemeStore()
 
-  useEffect(() => {
-      checkAuth();
-  }, [checkAuth]);
+    useEffect(() => {
+        checkAuth();
+    }, [checkAuth]);
 
-  console.log({ authUser });
+    console.log({ authUser });
 
-  if ((isCheckingAuth && !authUser) || isLoggingOut) return (
-      <div className='flex items-center justify-center h-screen'>
-          <Loader className='size-10 animate-spin'/>
-      </div>
-  )
+    if ((isCheckingAuth && !authUser) || isLoggingOut) return (
+        <div className='flex items-center justify-center h-screen'>
+            <Loader className='size-10 animate-spin'/>
+        </div>
+    )
 
-  return (
-      <div data-theme={theme}>
-          <Navbar />
-              <Routes>
-                  <Route path='/' element={authUser ? <HomePage /> : <Navigate to="loginAuth" />} />
-                  <Route path='/registerAuth' element={!authUser ? <SignUpPage /> : <Navigate to="/" />} />
-                  <Route path='/loginAuth' element={!authUser ? <LoginPage /> : <Navigate to="/" />} />
-                  <Route path='/settings' element={<SettingsPage />} />
-                  <Route path='/profile' element={authUser ? <ProfilePage /> : <Navigate to="loginAuth" />} />
-              </Routes>
+    return (
+        <div data-theme={theme}>
+            <Navbar />
+                <Routes>
+                    <Route path='/' element={authUser ? <HomePage /> : <Navigate to="/loginAuth" />} />
+                    <Route path='/registerAuth' element={!authUser ? <SignUpPage /> : <Navigate to="/" />} />
+                    <Route path='/loginAuth' element={!authUser ? <LoginPage /> : <Navigate to="/" />} />
+                    <Route path='/settings' element={<SettingsPage />} />
+                    <Route path='/profile' element={authUser ? <ProfilePage /> : <Navigate to="/loginAuth" />} />
+                </Routes>
 
-              <Toaster/>
-      </div>
-  )
-}
+                <Toaster/>
+        </div>
+    )
+};
 
-export default App
+export default App;
