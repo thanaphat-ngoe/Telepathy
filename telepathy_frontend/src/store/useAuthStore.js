@@ -6,6 +6,7 @@ export const useAuthStore = create((set) => ({
     authUser: null,
     isSigningUp: false,
     isLoggingIn: false,
+    isLoggingOut: false,
     isUpdatingProfile: false,
     isCheckingAuth: true,
     checkAuth: async () => {
@@ -21,12 +22,13 @@ export const useAuthStore = create((set) => ({
     },
     signUp: async (formData) => {
         try {
-            const response1 = await axiosInstance.post("/auth/register", formData);
-            const response2 = await axiosInstance.post("/auth/login", { 
+            set({ isSigningUp: true });
+            await axiosInstance.post("/auth/register", formData);
+            const response = await axiosInstance.post("/auth/login", { 
                 "email": formData.email,
                 "password": formData.password 
             });
-            set({ authUser: response2.data.email });
+            set({ authUser: response.data.email });
             toast.success("Account created successfully");
         } catch (error) {
             toast.error(error.response.data.message);
@@ -36,6 +38,7 @@ export const useAuthStore = create((set) => ({
     },
     logIn: async (formData) => {
         try {
+            set({ isLoggingIn: true })
             const response = await axiosInstance.post("/auth/login", formData);
             set({ authUser: response.data.email });
             toast.success("Logged in successfully");
@@ -47,11 +50,14 @@ export const useAuthStore = create((set) => ({
     },
     logOut: async () => {
         try {
-            const response = await axiosInstance.post("/auth/logout");
+            set({ isLoggingOut: true })
+            await axiosInstance.post("/auth/logout");
             set({ authUser: null });
             toast.success("Logged out successfully");
         } catch (error) {
             toast.success(error.response.data.message)
+        } finally {
+            set({ isLoggingOut: false });
         }
     }
 }));
