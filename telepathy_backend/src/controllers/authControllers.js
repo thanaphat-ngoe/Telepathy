@@ -4,9 +4,9 @@ import User from '../models/userModels.js';
 
 export const authRegister = async (req, res) => {
     try {
-        const { email, password } = req.body;
+        const { firstname, lastname, email, password } = req.body;
 
-        if (!email || !password) {
+        if (!firstname || !lastname || !email || !password) {
             return res.status(400).json({ message: "All field are required." });
         }
 
@@ -16,10 +16,10 @@ export const authRegister = async (req, res) => {
         }
 
         const hashedPassword = await bcrypt.hash(password, 12);
-        const newUser = new User({ email, password: hashedPassword });
+        const newUser = new User({ firstname, lastname, email, password: hashedPassword });
         const result = await newUser.save();
 
-        res.status(201).json({ message: "Registration successful!", email: result.email });
+        res.status(201).json({ message: "Registration successful!", email: result.email, firstname: result.firstname, lastname: result.lastname});
     } catch (error) {
         console.error("Registration error!:", error);
         res.status(500).json({ message: "An error occurred while creating your account." });
@@ -33,7 +33,6 @@ export const authLogin = (req, res, next) => {
 
         req.logIn(user, (error) => {
             if (error) return next(error);
-            console.log(req);
             return res.json({ message: "Login successful", email: user.email });
         });
     })(req, res, next);
@@ -43,7 +42,6 @@ export const authStatus = (req, res) => {
     if (req.isAuthenticated()) {
         res.status(200).json({ message: "Authenticated", email: req.user.email });
     } else {
-        //console.log(req);
         res.status(401).json({ message: "Unauthorized" });
     }
 };
