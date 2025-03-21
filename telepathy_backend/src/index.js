@@ -53,7 +53,7 @@ app.use(passport.session());
 
 // Routes
 app.use("/api/auth", authRoutes);
-app.use("/api/message", isAuthenticated, messageRoutes);
+app.use("/api/messages", isAuthenticated, messageRoutes);
 
 // Not found and error handling middleware
 app.use(notFound);
