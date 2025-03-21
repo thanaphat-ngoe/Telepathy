@@ -1,7 +1,7 @@
 import { Router } from 'express';
-const router = Router();
 import { getAllMessage, sendMessage, deleteChat } from "../controllers/messageControllers.js";
 
+const router = Router();
 
 router.get('/:id', getAllMessage);
 router.post('/:id', sendMessage);

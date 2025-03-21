@@ -26,7 +26,7 @@ export const getAllMessage = async (req, res) => {
     res.status(StatusCodes.OK).json(messages);
 };
 
-export const sendMessage = async(req, res) => {
+export const sendMessage = async (req, res) => {
     const { text } = req.body;
     const {id : receiverId} = req.params;
     const senderId = req.user._id;
