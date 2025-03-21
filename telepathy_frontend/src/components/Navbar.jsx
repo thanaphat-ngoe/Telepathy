@@ -1,4 +1,4 @@
-import { LogOut, MessageSquare, Settings, User } from "lucide-react";
+import { LogOut, MessageSquare, Settings, User, UserRoundPlus } from "lucide-react";
 import { useAuthStore } from "../store/useAuthStore";
 import { Link } from "react-router-dom";
 
@@ -16,6 +16,14 @@ const Navbar = () => {
                             </div>
                             <h1 className="text-lg font-bold">Chat With Telepathy</h1>
                         </Link>
+                        {authUser && (<>
+                            <form className="flex items-center gap-2" >
+                                <input type="text" name="userId"/>
+                                <button type="sumbit">
+                                    <UserRoundPlus />
+                                </button>
+                            </form>
+                        </>)}
                     </div>
     
                     <div className="flex items-center gap-2">
@@ -23,7 +31,6 @@ const Navbar = () => {
                             <Settings className="w-4 h-4" />
                                 <span className="hidden sm:inline">Settings</span>
                         </Link>
-    
                         {authUser && (<>
                             <Link to={"/profile"} className={`btn btn-sm gap-2`}>
                                 <User className="size-5" />
@@ -42,4 +49,4 @@ const Navbar = () => {
     ); 
 };
 
-export default Navbar
+export default Navbar;

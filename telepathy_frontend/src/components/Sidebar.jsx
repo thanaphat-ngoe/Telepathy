@@ -5,12 +5,12 @@ import SidebarSkeleton from "./skeletons/SidebarSkeleton";
 import { Users } from "lucide-react";
 
 const Sidebar = () => {
-    const { getUsers, users, selectedUser, setSelectedUser, isUsersLoading } = useChatStore();
+    const { getChats, chats, selectedUser, setSelectedUser, isUsersLoading } = useChatStore();
     const { onlineUsers } = [];
 
     useEffect(() => {
-        getUsers();
-    }, [getUsers]);
+      getChats();
+    }, [getChats]);
 
     if (isUsersLoading) return <SidebarSkeleton />;
 
@@ -24,14 +24,14 @@ const Sidebar = () => {
                 {/* TODO: Online filter toggle */}
             </div>
             <div className="overflow-y-auto w-full py-3">
-            {users.map((user) => (
+            {chats.map((chat) => (
           <button
-            key={user._id}
-            onClick={() => setSelectedUser(user)}
+            key={chat._id}
+            onClick={() => setSelectedUser(chat)}
             className={`
               w-full p-3 flex items-center gap-3
               hover:bg-base-300 transition-colors
-              ${selectedUser?._id === user._id ? "bg-base-300 ring-1 ring-base-300" : ""}
+              ${selectedUser?._id === chat._id ? "bg-base-300 ring-1 ring-base-300" : ""}
             `}
           >
             <div className="relative mx-auto lg:mx-0">
