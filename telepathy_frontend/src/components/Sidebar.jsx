@@ -5,14 +5,14 @@ import { Users } from "lucide-react";
 import SidebarSkeleton from "./skeletons/SidebarSkeleton";
 
 const Sidebar = () => {
-    const { getChats, chats, selectedUser, setSelectedUser, isUsersLoading } = useChatStore();
+    const { getChats, chats, selectedChat, setSelectedChat, isChatsLoading } = useChatStore();
     const { onlineUsers } = useAuthStore();
 
     useEffect(() => {
         getChats();
     }, [getChats]);
 
-    if (isUsersLoading) return <SidebarSkeleton />;
+    if (isChatsLoading) return <SidebarSkeleton />;
 
     return (
         <aside className="h-full w-20 lg:w-72 border-r border-base-300 flex flex-col transition-all duration-200">
@@ -28,10 +28,10 @@ const Sidebar = () => {
                 {chats.map((chat) => (
                     <button
                         key={chat.participants._id}
-                        onClick={() => setSelectedUser(chat)}
+                        onClick={() => setSelectedChat(chat)}
                         className={`
                             w-full p-3 flex items-center gap-3 hover:bg-base-300 transition-colors
-                            ${selectedUser?.participants._id === chat.participants._id ? "bg-base-300 ring-1 ring-base-300" : ""}
+                            ${selectedChat?.participants._id === chat.participants._id ? "bg-base-300 ring-1 ring-base-300" : ""}
                         `}
                     >
                         <div className="relative mx-auto lg:mx-0">

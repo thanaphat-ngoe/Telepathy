@@ -21,8 +21,6 @@ const App = () => {
         checkAuth();
     }, [checkAuth]);
 
-    console.log(authUser);
-
     if ((isCheckingAuth && !authUser) || isLoggingOut) return (
         <div className="flex items-center justify-center h-screen">
             <Loader className="size-10 animate-spin" />
