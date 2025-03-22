@@ -3,8 +3,8 @@ import { getAllMessage, sendMessage, deleteChat } from "../controllers/messageCo
 
 const router = Router();
 
-router.get('/:id', getAllMessage);
-router.post('/:id', sendMessage);
+router.get('/get/:id', getAllMessage);
+router.post('/send/:id', sendMessage);
 router.delete('/:id', deleteChat);
 
 export default router;

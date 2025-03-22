@@ -4,7 +4,6 @@ import User from "../models/userModels.js";
 import Chat from "../models/chatModels.js";
 import NotFoundError from "../errors/not-found.js";
 import ForbiddenError from "../errors/forbidden.js";
-import UnauthenticatedError from "../errors/unauthenticated.js";
 import { io, getReceiverSocketId } from "../utils/socket.js";
 
 
@@ -88,4 +87,3 @@ export const deleteChat = async(req, res) => {
     res.status(StatusCodes.OK).json({messages : `chat deleted successfully`});
     
 }
-
