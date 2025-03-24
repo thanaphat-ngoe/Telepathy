@@ -14,18 +14,29 @@ import { useAuthStore } from "./store/useAuthStore";
 import { useThemeStore } from "./store/useThemeStore";
 
 const App = () => {
-    const { authUser, checkAuth, isCheckingAuth, isLoggingOut } = useAuthStore();
+    const {
+        authUser,
+        checkAuth,
+        isCheckingAuth,
+        isLoggingOut,
+        onlineUsers,
+    } = useAuthStore();
     const { theme } = useThemeStore();
+
+    console.log({ onlineUsers });
 
     useEffect(() => {
         checkAuth();
+        console.log("Run use state");
     }, [checkAuth]);
 
-    if ((isCheckingAuth && !authUser) || isLoggingOut) return (
-        <div className="flex items-center justify-center h-screen">
-            <Loader className="size-10 animate-spin" />
-        </div>
-    );
+    if ((isCheckingAuth && !authUser) || isLoggingOut) {
+        return (
+            <div className="flex items-center justify-center h-screen">
+                <Loader className="size-10 animate-spin" />
+            </div>
+        );
+    }
 
     return (
         <div data-theme={theme}>
@@ -37,7 +48,7 @@ const App = () => {
                 <Route path="/settings" element={<SettingsPage />} />
                 <Route path="/profile" element={authUser ? <ProfilePage /> : <Navigate to="/loginAuth" />} />
             </Routes>
-        <Toaster />
+            <Toaster />
         </div>
     );
 };

@@ -5,12 +5,7 @@ import { Link } from "react-router-dom";
 
 const SignUpPage = () => {
     const [showPassword, setShowPassword] = useState(false);
-    const [formData, setFormData] = useState({
-        firstname: "",
-        lastname: "",
-        email: "",
-        password: ""
-    }); 
+    const [formData, setFormData] = useState({ firstname: "", lastname: "", email: "", password: "" }); 
     const { signUp, isSigningUp } = useAuthStore();
     const validateForm = () => {
         if (!formData.firstname.trim()) return toast.error("First Name is required");
@@ -20,7 +15,7 @@ const SignUpPage = () => {
         if (!formData.password) return toast.error("Password is required");
         if (formData.password.length < 6) return toast.error("Password must be at least 6 characters");
 
-    return true;
+        return true;
     };
     const handleSumbit = (event) => {
         event.preventDefault()

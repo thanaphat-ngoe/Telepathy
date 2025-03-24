@@ -9,7 +9,6 @@ export const useChatStore = create((set, get) => ({
     selectedChat: null,
     isChatsLoading: false,
     isMessagesLoading: false,
-
     getChats: async () => {
         set({ isChatsLoading: true });
         try {
@@ -21,11 +20,10 @@ export const useChatStore = create((set, get) => ({
             set({ isChatsLoading: false });
         }
     },
-    
-    getMessages: async (userId) => {
+    getMessages: async (chatId) => {
         set({ isMessagesLoading: true });
         try {
-            const response = await axiosInstance.get(`/messages/get/${userId}`);
+            const response = await axiosInstance.get(`/messages/get/${chatId}`);
             set({ messages: response.data });
         } catch (error) {
             toast.error(error.response.data.message);
@@ -33,7 +31,6 @@ export const useChatStore = create((set, get) => ({
             set({ isMessagesLoading: false });
         }
     },
-    
     sendMessage: async (messageData) => {
         const { selectedChat, messages } = get();
         try {
@@ -44,7 +41,6 @@ export const useChatStore = create((set, get) => ({
             toast.error(error.response.data.message);
         }
     },
-    
     subscribeToMessages: () => {
         const { selectedChat } = get();
         if (!selectedChat) return;
@@ -52,19 +48,15 @@ export const useChatStore = create((set, get) => ({
         const socket = useAuthStore.getState().socket;
 
         socket.on("newMessage", (newMessage) => {
-            const isMessageSentFromSelectedChat = newMessage.senderId === selectedChat._id;
-            if (!isMessageSentFromSelectedChat) return;
-
+            if (newMessage.senderId !== selectedChat.participants._id) return;
             set({
                 messages: [...get().messages, newMessage],
             });
         });
     },
-
     unsubscribeFromMessages: () => {
         const socket = useAuthStore.getState().socket;
         socket.off("newMessage");
     },
-
     setSelectedChat: (selectedChat) => set({ selectedChat }),
 }));
