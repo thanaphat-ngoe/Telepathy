@@ -19,7 +19,12 @@ export const authRegister = async (req, res) => {
         const newUser = new User({ firstname, lastname, email, password: hashedPassword });
         const result = await newUser.save();
 
-        res.status(201).json({ message: "Registration successful!", email: result.email, firstname: result.firstname, lastname: result.lastname });
+        res.status(201).json({ 
+            message: "Registration successful!", 
+            email: result.email, 
+            firstname: result.firstname, 
+            lastname: result.lastname 
+        });
     } catch (error) {
         console.error("Registration error!:", error);
         res.status(500).json({ message: "An error occurred while creating your account." });
@@ -33,14 +38,27 @@ export const authLogin = (req, res, next) => {
 
         req.logIn(user, (error) => {
             if (error) return next(error);
-            return res.json({ message: "Login successful", firstname: user.firstname, lastname: user.lastname, email: user.email, createdAt: user.createdAt });
+            return res.json({ 
+                message: "Login successful",
+                _id: user._id,
+                firstname: user.firstname, 
+                lastname: user.lastname, 
+                email: user.email, 
+                createdAt: user.createdAt 
+            });
         });
     })(req, res, next);
 };
 
 export const authStatus = (req, res) => {
     if (req.isAuthenticated()) {
-        res.status(200).json({ message: "Authenticated", firstname: req.user.firstname, lastname: req.user.lastname, email: req.user.email, createdAt: req.user.createdAt });
+        res.status(200).json({ 
+            message: "Authenticated",
+            _id: req.user._id,
+            firstname: req.user.firstname, 
+            lastname: req.user.lastname, 
+            email: req.user.email, 
+            createdAt: req.user.createdAt });
     } else {
         res.status(401).json({ message: "Unauthorized" });
     }

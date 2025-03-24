@@ -8,21 +8,30 @@ import { io, getReceiverSocketId } from "../utils/socket.js";
 
 
 export const getAllMessage = async (req, res) => {
-    const { id : userToChat } = req.params;
-    const VerifiedUserToChat = await User.findById(userToChat);
-    if (!VerifiedUserToChat) {
-        throw new NotFoundError(`User with id ${userToChat} does not exist`);
+    try {
+        const { id: chatId } = req.params;
+        if (!chatId) return res.status(400).json({ message: "Chat ID is required." });
+        console.log(chatId);
+        const message = await Message.find({ chatId: chatId });
+        if (!message) return res.status(400).json({ message: "Invalid chat ID." });
+
+        console.log(message);
+        res.status(200).json(message);
+    } catch (error) {
+        res.status(500).json({ message: "An error occurred while retrieving your message." });
     }
-    const myId = req.user.userId;
-
-    const messages = await Message.find({
-        $or: [
-            { senderId: myId, receiverId: VerifiedUserToChat._id },
-            { senderId: VerifiedUserToChat._id, receiverId: myId }
-        ]
-    });
-
-    res.status(StatusCodes.OK).json(messages);
+    //const { id : userToChat } = req.params;
+    //const VerifiedUserToChat = await User.findById(userToChat);
+    //if (!VerifiedUserToChat) {
+        //throw new NotFoundError(`User with id ${userToChat} does not exist`);
+    //}
+    //const myId = req.user.userId;
+    //const messages = await Message.find({
+        //$or: [
+            //{ senderId: myId, receiverId: VerifiedUserToChat._id },
+            //{ senderId: VerifiedUserToChat._id, receiverId: myId }
+        //]
+    //});
 };
 
 export const sendMessage = async (req, res) => {

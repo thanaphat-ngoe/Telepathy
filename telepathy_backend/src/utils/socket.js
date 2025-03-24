@@ -1,19 +1,12 @@
-import express from 'express';
 import { Server } from 'socket.io';
+import express from 'express';
 import http from 'http';
 
-export const app = express();
-export const server = http.createServer(app);
+const app = express();
+const server = http.createServer(app);
+const io = new Server(server, { cors: { origin: ["http://localhost:3001"], credentials: true } });
 
-export const io = new Server(server, {
-    cors: {
-        origin: ["http://localhost:3001"], 
-        credentials: true
-    }
-});
-
-// Store online users
-const userSocketMap = {};
+const userSocketMap = {}; // Store online users
 
 export function getReceiverSocketId(userId) {
     return userSocketMap[userId]; 
@@ -21,20 +14,9 @@ export function getReceiverSocketId(userId) {
 
 io.on("connection", (socket) => {
     console.log("User connected:", socket.id);
-    
-    // Retrieve the userId from the handshake query parameter
+
     const userId = socket.handshake.query.userId;
-    
-    if (!userId) {
-        console.error("No userId provided in the connection request.");
-        socket.disconnect(); // Disconnect the socket if userId is missing
-        return;
-    }
-
-    console.log("User ID on connection:", userId);
-
-    // Store the socket ID for the connected user
-    userSocketMap[userId] = socket.id;
+    if (userId) userSocketMap[userId] = socket.id;
 
     // Emit updated online users list to all connected clients
     io.emit("getOnlineUsers", Object.keys(userSocketMap));
@@ -47,3 +29,4 @@ io.on("connection", (socket) => {
     });
 });
 
+export { app, server, io };
